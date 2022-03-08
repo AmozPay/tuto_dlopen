@@ -17,11 +17,27 @@ __attribute__((__destructor__))  void unloader()
 }
 
 
-char *who_is_the_best_character()
+/* This is a cpp file, and as such, function names can be modified by the compiler because of overloads.
+** To prevent this, we can add extern "C" to indicate that this must be compatible with C, so it will not modify the name (and can't be overloaded)
+*/
+extern "C" char *who_is_the_best_character()
 {
     char the_best[] = "Chopper";
-    char *ret = malloc(8);
+    char *ret = (char *) malloc(8);
     for (int i = 0; i < 8; i++)
         ret[i] = the_best[i];
     return ret;
 }
+
+// Antoher possible syntax
+
+// extern "C" {
+//     char *who_is_the_best_character()
+//     {
+//         char the_best[] = "yamcha";
+//         char *ret = (char*) malloc(7);
+//         for (int i = 0; i < 7; i++)
+//             ret[i] = the_best[i];
+//         return ret;
+//     }
+// }

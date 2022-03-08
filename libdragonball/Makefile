@@ -7,15 +7,15 @@
 
 TARGET		=	libdragonball.so
 
-CC			=	gcc
+CC			=	g++
 CFLAGS		=	-c
 
-LD			=	gcc
+LD			=	g++
 LD_FLAGS	=	-fPIC -shared
 
-SRC			=	libdragonball.c
+SRC			=	libdragonball.cpp
 
-OBJ			=	$(SRC:.c=.o)
+OBJ			=	$(SRC:.cpp=.o)
 
 .RECIPEPREFIX	=	-
 .PHONY: all clean fclean re
@@ -31,5 +31,5 @@ fclean:	clean
 
 re: fclean all
 
-%.o:	%.c
+%.o:	%.cpp
 -$(CC) $(CFLAGS) -o $@ $<

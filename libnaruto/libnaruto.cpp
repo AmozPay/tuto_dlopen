@@ -17,10 +17,10 @@ __attribute__((__destructor__))  void unloader()
 }
 
 
-char *who_is_the_best_character()
+extern "C" char *who_is_the_best_character()
 {
     char the_best[] = "sasuke";
-    char *ret = malloc(7);
+    char *ret = (char *) malloc(7);
     for (int i = 0; i < 7; i++)
         ret[i] = the_best[i];
     return ret;
