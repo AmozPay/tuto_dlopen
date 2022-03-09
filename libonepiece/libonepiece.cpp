@@ -1,19 +1,26 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+static char *best_character;
+
 __attribute__((__constructor__))  void loader()
 {
     write(1, "Loading libonepiece\n", 18);
+    char the_best[] = "Chopper";
+    best_character = (char *) malloc(8);
+    for (int i = 0; i < 8; i++)
+        best_character[i] = the_best[i];
 }
 
 /*  __attribute__ is a like decorator, used by compiler to get usefull information.
 **  it takes at least 1 parameter, passed into a double parenthesis /!\
 ** the constructor and destructor attibutes indicate wich functions to call before dlopen() and dlclose() respectively return.
-** It can be useful to initialize and clean data, but in this cas, for demo purposes, it only prints a message.
+** It can be useful to initialize and clean data.
 */
 __attribute__((__destructor__))  void unloader()
 {
     write(1, "Unloading libonepiece\n", 20);
+    free(best_character);
 }
 
 
@@ -22,11 +29,7 @@ __attribute__((__destructor__))  void unloader()
 */
 extern "C" char *who_is_the_best_character()
 {
-    char the_best[] = "Chopper";
-    char *ret = (char *) malloc(8);
-    for (int i = 0; i < 8; i++)
-        ret[i] = the_best[i];
-    return ret;
+    return best_character;
 }
 
 // Antoher possible syntax

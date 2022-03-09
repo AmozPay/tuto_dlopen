@@ -21,9 +21,7 @@ int main()
             return -1;
         }
         char *(*f)() = dlsym(handle, "who_is_the_best_character"); // dlsym loads a symbol as a void *, which you can cast.
-        char *s = f();
-        printf("\n\nThe best character is %s !!!!\n\n", s);
-        free(s);
+        printf("\n\nThe best character is %s !!!!\n\n", f());
         dlclose(handle);
     }
 }
