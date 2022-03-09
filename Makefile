@@ -9,7 +9,7 @@ all:
 	make -C libdragonball
 	make -C libnaruto
 	make -C libonepiece
-	gcc main.c
+	clang++ main.cpp
 
 clean:
 	make clean -C libdragonball
