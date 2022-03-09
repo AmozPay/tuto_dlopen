@@ -16,9 +16,9 @@ int main()
         scanf("%d", &lib);
         if (lib == 0)
             break;
-        void *handle = dlopen(libs[lib - 1], RTLD_LAZY); // RTLD_LAZY: only load a symbol (function) upon call with dlsym()
-        if (!handle) {
-            char *err = dlerror(); // check if there is an error message
+        void *handle = dlopen(libs[lib - 1], RTLD_LAZY); // dlopen(): open a shared library file (libexample.so). RTLD_LAZY: only load a symbol (function) upon call with dlsym()
+        if (!handle) { // handle is a pointer to the loaded library. If dlopen fails, handle is NULL.
+            char *err = dlerror(); // Get the error message from failed dlopen or dlsym.
             dprintf(2, "%s\n", err);
             return -1;
         }
@@ -28,6 +28,6 @@ int main()
         IDisplayModule *character = reinterpret_cast<IDisplayModule *>(createCharacter());
         character->display();
         delete character;
-        dlclose(handle);
+        dlclose(handle); // close the library
     }
 }
