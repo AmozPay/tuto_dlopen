@@ -7,10 +7,10 @@
 
 TARGET		=	libdragonball.so
 
-CC			=	g++
-CFLAGS		=	-c
+CXX			=	clang++
+CXXFLAGS		=	-c -fPIC
 
-LD			=	g++
+LD			=	clang++
 LD_FLAGS	=	-fPIC -shared
 
 SRC			=	libdragonball.cpp
@@ -32,4 +32,4 @@ fclean:	clean
 re: fclean all
 
 %.o:	%.cpp
--$(CC) $(CFLAGS) -o $@ $<
+-$(CXX) $(CXXFLAGS) -o $@ $<

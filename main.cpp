@@ -1,6 +1,8 @@
 #include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
+#include "interface.hpp"
 
 int main()
 {
@@ -17,11 +19,15 @@ int main()
         void *handle = dlopen(libs[lib - 1], RTLD_LAZY); // RTLD_LAZY: only load a symbol (function) upon call with dlsym()
         if (!handle) {
             char *err = dlerror(); // check if there is an error message
-            dprintf(2, err);
+            dprintf(2, "%s\n", err);
             return -1;
         }
-        char *(*f)() = dlsym(handle, "who_is_the_best_character"); // dlsym loads a symbol as a void *, which you can cast.
+        char *(*f)() = reinterpret_cast<char *(*)()>(dlsym(handle, "who_is_the_best_character")); // dlsym loads a symbol as a void *, which you can cast.
+        void *(*createCharacter)() = reinterpret_cast<void *(*)()>(dlsym(handle, "createCharacter")); // dlsym loads a symbol as a void *, which you can cast.
         printf("\n\nThe best character is %s !!!!\n\n", f());
+        IDisplayModule *character = reinterpret_cast<IDisplayModule *>(createCharacter());
+        character->display();
+        delete character;
         dlclose(handle);
     }
 }

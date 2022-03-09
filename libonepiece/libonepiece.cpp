@@ -1,11 +1,37 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <iostream>
+#include <fstream>
+#include "../interface.hpp"
+
+class Chopper: public IDisplayModule {
+    public:
+        Chopper(): _name("Chopper") {}
+        ~Chopper(){}
+        void display() {
+            std::ifstream asciiArt;
+            std::string s;
+            asciiArt.open("./libonepiece/chopper.txt");
+            if (!asciiArt.is_open())
+                std::cout << "NOOOON";
+            while (asciiArt.peek() != EOF) {
+                std::getline(asciiArt, s);
+                std::cout << s << std::endl;
+            }
+            asciiArt.close();
+        }
+        const std::string &getName() const {
+            return _name;
+        }
+    private:
+        const std::string _name;
+};
 
 static char *best_character;
 
 __attribute__((__constructor__))  void loader()
 {
-    write(1, "Loading libonepiece\n", 18);
+    write(1, "Loading libonepiece\n", 19);
     char the_best[] = "Chopper";
     best_character = (char *) malloc(8);
     for (int i = 0; i < 8; i++)
@@ -19,7 +45,7 @@ __attribute__((__constructor__))  void loader()
 */
 __attribute__((__destructor__))  void unloader()
 {
-    write(1, "Unloading libonepiece\n", 20);
+    write(1, "Unloading libonepiece\n", 21);
     free(best_character);
 }
 
@@ -30,6 +56,12 @@ __attribute__((__destructor__))  void unloader()
 extern "C" char *who_is_the_best_character()
 {
     return best_character;
+}
+
+extern "C" void *createCharacter()
+{
+    IDisplayModule *character = new Chopper();
+    return character;
 }
 
 // Antoher possible syntax

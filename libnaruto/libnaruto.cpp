@@ -1,5 +1,29 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <fstream>
+#include <iostream>
+#include "../interface.hpp"
+
+class Sasuke: public IDisplayModule {
+    public:
+        Sasuke(): _name("Sasuke") {}
+        ~Sasuke(){}
+        void display() {
+            std::ifstream asciiArt;
+            std::string s;
+            asciiArt.open("./libnaruto/sasuke.txt");
+            while (asciiArt.peek() != EOF) {
+                std::getline(asciiArt, s);
+                std::cout << s << std::endl;
+            }
+            asciiArt.close();
+        }
+        const std::string &getName() const {
+            return _name;
+        }
+    private:
+        const std::string _name;
+};
 
 static char *best_character;
 
@@ -30,6 +54,14 @@ __attribute__((__destructor__))  void unloader()
 extern "C" char *who_is_the_best_character()
 {
     return best_character;
+}
+
+extern "C" void *createCharacter()
+{
+    void *character = new Sasuke();
+    void *as_void = static_cast<void *>(character);
+
+    return as_void;
 }
 
 // Antoher possible syntax

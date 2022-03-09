@@ -1,5 +1,31 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <fstream>
+#include <iostream>
+#include "../interface.hpp"
+
+class Yamcha: public IDisplayModule {
+    public:
+        Yamcha(): _name("Yamcha") {}
+        ~Yamcha(){}
+        void display() {
+            std::ifstream asciiArt;
+            std::string s;
+            asciiArt.open("./libdragonball/yamcha.txt");
+            if (!asciiArt.is_open())
+                std::cout << "NOOOON";
+            while (asciiArt.peek() != EOF) {
+                std::getline(asciiArt, s);
+                std::cout << s << std::endl;
+            }
+            asciiArt.close();
+        }
+        const std::string &getName() const {
+            return _name;
+        }
+    private:
+        const std::string _name;
+};
 
 static char *best_character;
 
@@ -31,6 +57,12 @@ __attribute__((__destructor__))  void unloader()
 extern "C" char *who_is_the_best_character()
 {
     return best_character;
+}
+
+extern "C" void *createCharacter()
+{
+    IDisplayModule *character = new Yamcha();
+    return character;
 }
 
 // Antoher possible syntax
